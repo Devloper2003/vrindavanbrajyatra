@@ -3,8 +3,53 @@ import { db } from '@/lib/db'
 
 const DEFAULT_PASSWORD_HASH = btoa(process.env.ADMIN_PASSWORD || 'brajyatra2024')
 
+// Auto-seed admin user if database is empty (happens on fresh Vercel deployment)
+async function ensureAdminExists() {
+  try {
+    const adminCount = await db.adminUser.count({ where: { role: 'admin' } })
+    if (adminCount > 0) return
+
+    const adminPassword = process.env.ADMIN_PASSWORD || 'brajyatra2024'
+    const passwordHash = btoa(adminPassword)
+
+    await db.adminUser.create({
+      data: {
+        username: 'admin',
+        password: passwordHash,
+        role: 'admin',
+        name: 'Admin',
+        canEditHero: true,
+        canEditAbout: true,
+        canEditHighlights: true,
+        canEditPackages: true,
+        canEditTestimonials: true,
+        canEditFAQ: true,
+        canEditContact: true,
+        canEditFooter: true,
+        canManageBlogs: true,
+        canManageGallery: true,
+        canViewInquiries: true,
+      },
+    })
+
+    // Store password in AdminSettings for legacy login support
+    await db.adminSettings.upsert({
+      where: { key: 'admin_password' },
+      update: { value: passwordHash },
+      create: { key: 'admin_password', value: passwordHash },
+    })
+
+    console.log('✅ Auto-seed: Admin user created during login')
+  } catch (error) {
+    console.error('Auto-seed failed:', error)
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
+    // Ensure admin user exists (auto-seed for fresh deployments)
+    await ensureAdminExists()
+
     const body = await request.json()
     const { username, password } = body
 
@@ -53,7 +98,7 @@ export async function POST(request: NextRequest) {
       if (passwordHash === storedHash) {
         // Check if there's a default admin user
         const adminUser = await db.adminUser.findFirst({ where: { role: 'admin' } })
-        
+
         if (adminUser) {
           return NextResponse.json({
             success: true,
@@ -106,6 +151,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
   } catch (error) {
     console.error('Error during login:', error)
-    return NextResponse.json({ error: 'Login failed' }, { status: 500 })
+    return NextResponse.json({ error: 'Login failed. Database may not be initialized. Please run migrations first.' }, { status: 500 })
   }
 }
