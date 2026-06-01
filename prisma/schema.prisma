@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Blog {
+  id            String   @id @default(cuid())
+  title         String
+  slug          String   @unique
+  content       String
+  excerpt       String?
+  category      String
+  featuredImage String?
+  published     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Inquiry {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  message   String
+  package   String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model GalleryImage {
+  id        String   @id @default(cuid())
+  src       String
+  alt       String
+  category  String
+  createdAt DateTime @default(now())
+}
+
+model SectionContent {
+  id        String   @id @default(cuid())
+  section   String   @unique
+  title     String?
+  subtitle  String?
+  content   String?
+  updatedAt DateTime @updatedAt
+}
+
+model AdminSettings {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  role      String   @default("staff")
+  name      String
+  createdAt DateTime @default(now())
+
+  canEditHero         Boolean @default(false)
+  canEditAbout        Boolean @default(false)
+  canEditHighlights   Boolean @default(false)
+  canEditPackages     Boolean @default(false)
+  canEditTestimonials Boolean @default(false)
+  canEditFAQ          Boolean @default(false)
+  canEditContact      Boolean @default(false)
+  canEditFooter       Boolean @default(false)
+  canManageBlogs      Boolean @default(false)
+  canManageGallery    Boolean @default(false)
+  canViewInquiries    Boolean @default(true)
+}

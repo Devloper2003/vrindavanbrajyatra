@@ -1,0 +1,418 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Braj Yatra Custom Colors */
+  --color-braj-dark-green: #0C392E;
+  --color-braj-teal: #0C6775;
+  --color-braj-gold: #B8A422;
+  --color-braj-saffron: #F7B808;
+  --color-braj-cream: #FFF8E7;
+  --color-braj-white: #FFFFFF;
+  --color-braj-dark: #1A1A1A;
+  --color-braj-light-gold: #F5E6C8;
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: #FFF8E7;
+  --foreground: #1A1A1A;
+  --card: #FFFFFF;
+  --card-foreground: #1A1A1A;
+  --popover: #FFFFFF;
+  --popover-foreground: #1A1A1A;
+  --primary: #0C392E;
+  --primary-foreground: #FFFFFF;
+  --secondary: #0C6775;
+  --secondary-foreground: #FFFFFF;
+  --muted: #F5E6C8;
+  --muted-foreground: #4A4A4A;
+  --accent: #B8A422;
+  --accent-foreground: #FFFFFF;
+  --destructive: #DC2626;
+  --border: #F5E6C8;
+  --input: #F5E6C8;
+  --ring: #0C6775;
+  --chart-1: #0C392E;
+  --chart-2: #0C6775;
+  --chart-3: #B8A422;
+  --chart-4: #F7B808;
+  --chart-5: #F5E6C8;
+  --sidebar: #FFF8E7;
+  --sidebar-foreground: #1A1A1A;
+  --sidebar-primary: #0C392E;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F5E6C8;
+  --sidebar-accent-foreground: #1A1A1A;
+  --sidebar-border: #F5E6C8;
+  --sidebar-ring: #0C6775;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FFF8E7;
+}
+::-webkit-scrollbar-thumb {
+  background: #0C6775;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #0C392E;
+}
+
+/* WhatsApp Pulse Animation */
+@keyframes whatsapp-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+  }
+}
+
+.whatsapp-pulse {
+  animation: whatsapp-pulse 2s infinite;
+}
+
+/* ─── CINEMATIC KEYFRAMES ──────────────────────────────────── */
+
+/* Smooth shimmer for text highlights */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.shimmer-text {
+  background: linear-gradient(90deg, #F7B808 0%, #FFFFFF 25%, #F7B808 50%, #FFFFFF 75%, #F7B808 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+/* Golden glow pulse */
+@keyframes glow-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(247, 184, 8, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(247, 184, 8, 0.6));
+  }
+}
+
+.glow-gold {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* Breathing effect for decorative elements */
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.06; }
+  50% { transform: scale(1.05); opacity: 0.1; }
+}
+
+.breathe {
+  animation: breathe 6s ease-in-out infinite;
+}
+
+/* Float up and down */
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.float-gentle {
+  animation: float-gentle 4s ease-in-out infinite;
+}
+
+/* Slow spin for decorative elements */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spin-slow {
+  animation: spin-slow 120s linear infinite;
+}
+
+.spin-slower {
+  animation: spin-slow 200s linear infinite;
+}
+
+/* Gradient shift */
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.gradient-animate {
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease-in-out infinite;
+}
+
+/* Fade in from blur */
+@keyframes fade-from-blur {
+  0% { opacity: 0; filter: blur(12px); transform: translateY(20px); }
+  100% { opacity: 1; filter: blur(0px); transform: translateY(0); }
+}
+
+.fade-from-blur {
+  animation: fade-from-blur 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ─── DECORATIVE ELEMENTS ──────────────────────────────────── */
+
+.lotus-divider {
+  position: relative;
+  text-align: center;
+}
+.lotus-divider::before,
+.lotus-divider::after {
+  content: '\2726';
+  color: #B8A422;
+  font-size: 1.25rem;
+  margin: 0 0.5rem;
+}
+
+.peacock-border {
+  border-image: linear-gradient(90deg, #0C392E, #0C6775, #B8A422, #0C6775, #0C392E) 1;
+}
+
+.section-ornament {
+  position: relative;
+}
+.section-ornament::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #0C392E, #B8A422, #0C392E);
+  border-radius: 2px;
+}
+
+.hero-gradient {
+  background: linear-gradient(
+    135deg,
+    rgba(12, 57, 46, 0.88) 0%,
+    rgba(12, 103, 117, 0.72) 50%,
+    rgba(12, 57, 46, 0.88) 100%
+  );
+}
+
+/* ─── CINEMATIC CARD EFFECTS ──────────────────────────────── */
+
+.card-hover {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(12, 57, 46, 0.15);
+}
+
+.card-3d {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+.card-3d:hover {
+  transform: translateY(-8px) rotateX(2deg);
+  box-shadow: 0 25px 50px rgba(12, 57, 46, 0.18);
+}
+
+/* Gallery grid item */
+.gallery-item {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+}
+.gallery-item:hover {
+  transform: scale(1.03);
+}
+.gallery-item img {
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.gallery-item:hover img {
+  transform: scale(1.1);
+}
+
+/* ─── CINEMATIC BUTTON EFFECTS ────────────────────────────── */
+
+.btn-cinematic {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.btn-cinematic::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  transform: translate(-50%, -50%);
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1), height 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.btn-cinematic:hover::before {
+  width: 300%;
+  height: 300%;
+}
+
+/* ─── GLASS MORPHISM ──────────────────────────────────────── */
+
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.glass-dark {
+  background: rgba(12, 57, 46, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-light {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(245, 230, 200, 0.5);
+}
+
+/* ─── CINEMATIC SECTIONS ──────────────────────────────────── */
+
+.cinematic-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.cinematic-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 30%, rgba(247, 184, 8, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* ─── ORNAMENTAL DIVIDERS ─────────────────────────────────── */
+
+.ornament-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+.ornament-line::before,
+.ornament-line::after {
+  content: '';
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #B8A422, transparent);
+}
+
+/* Custom selection color */
+::selection {
+  background: #B8A422;
+  color: #FFFFFF;
+}
+
+/* ─── 3D PERSPECTIVE UTILITY ──────────────────────────────── */
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+.perspective-1500 {
+  perspective: 1500px;
+}
+.perspective-2000 {
+  perspective: 2000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+/* ─── SMOOTH PAGE TRANSITIONS ─────────────────────────────── */
+
+@keyframes page-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+}
+
+.page-enter {
+  animation: page-enter 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}

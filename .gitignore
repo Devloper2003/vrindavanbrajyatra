@@ -1,0 +1,87 @@
+# dependencies
+node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# database
+/db/
+*.db
+*.db-journal
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+*.log
+
+# env files
+.env
+.env.local
+.env.production.local
+.env.development.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# IDE
+.vscode
+.idea
+
+# Project specific
+local-*
+.claude
+.z-ai-config
+skills/
+agent-ctx/
+download/
+worklog.md
+dev.log
+server.log
+prompt
+test
+
+# Server/deployment specific
+.zscripts/
+examples/
+mini-services/
+Caddyfile
+start.sh
+vultr-setup.sh
+nginx.conf
+ecosystem.config.js
+vrindavan_images.json
+
+# Upload directory (user-specific)
+upload/
+
+# Root seed.ts duplicate
+/seed.ts
+
+# Agent/context files
+agent-ctx/
+download/
+worklog.md
