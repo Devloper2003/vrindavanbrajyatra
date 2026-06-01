@@ -218,11 +218,18 @@ const SIDEBAR_GROUPS = [
 ]
 
 // ============== Helper: save section content ==============
+function getAdminPassword(): string {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('braj-admin-password') || 'brajyatra2024'
+  }
+  return 'brajyatra2024'
+}
+
 async function saveSectionContent(section: string, title: string, subtitle: string, content: string) {
   const res = await fetch('/api/section-content', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ section, title, subtitle, content, password: 'brajyatra2024' }),
+    body: JSON.stringify({ section, title, subtitle, content, password: getAdminPassword() }),
   })
   if (!res.ok) throw new Error('Failed to save')
   return res.json()
@@ -254,11 +261,12 @@ export default function AdminContent() {
     return null
   })
 
-  const handleLogin = (user: AdminUser) => {
+  const handleLogin = (user: AdminUser, password?: string) => {
     setIsLoggedIn(true)
     setCurrentUser(user)
     localStorage.setItem('braj-admin-logged', 'true')
     localStorage.setItem('braj-admin-user', JSON.stringify(user))
+    if (password) localStorage.setItem('braj-admin-password', password)
   }
 
   const handleLogout = () => {
@@ -266,6 +274,7 @@ export default function AdminContent() {
     setCurrentUser(null)
     localStorage.removeItem('braj-admin-logged')
     localStorage.removeItem('braj-admin-user')
+    localStorage.removeItem('braj-admin-password')
   }
 
   const visibleGroups = useMemo(() => SIDEBAR_GROUPS.map(group => ({
@@ -513,7 +522,7 @@ function AccessDenied() {
 }
 
 // ============== Login ==============
-function AdminLogin({ onLogin }: { onLogin: (user: AdminUser) => void }) {
+function AdminLogin({ onLogin }: { onLogin: (user: AdminUser, password?: string) => void }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -533,7 +542,7 @@ function AdminLogin({ onLogin }: { onLogin: (user: AdminUser) => void }) {
       if (res.ok) {
         const data = await res.json()
         const user: AdminUser = data.user || DEFAULT_USER
-        onLogin(user)
+        onLogin(user, password)
       } else {
         setError('Invalid credentials. Please try again.')
       }
@@ -1953,17 +1962,19 @@ function AdminBlogs() {
 
   const handleSave = async () => {
     const isEdit = !!editBlog
-    const res = await fetch('/api/blogs', {
-      method: isEdit ? 'PUT' : 'POST',
+    const url = isEdit ? `/api/blogs/${editBlog.id}` : '/api/blogs'
+    const method = isEdit ? 'PUT' : 'POST'
+    const res = await fetch(url, {
+      method,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(isEdit ? { id: editBlog.id, ...form } : form),
+      body: JSON.stringify(isEdit ? { id: editBlog.id, ...form, password: getAdminPassword() } : { ...form, password: getAdminPassword() }),
     })
     if (res.ok) { toast.success(isEdit ? 'Blog updated!' : 'Blog created!'); setShowForm(false); setEditBlog(null); fetchBlogs() } else { toast.error('Failed to save blog') }
   }
 
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this blog?')) return
-    const res = await fetch('/api/blogs', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }) })
+    const res = await fetch(`/api/blogs/${id}`, { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: getAdminPassword() }) })
     if (res.ok) { toast.success('Blog deleted'); fetchBlogs() } else { toast.error('Failed to delete') }
   }
 
@@ -2033,16 +2044,16 @@ function AdminInquiries() {
   useEffect(() => { fetchInquiries() }, [fetchInquiries])
 
   const markRead = async (id: string) => {
-    await fetch('/api/inquiries', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, read: true }) })
+    await fetch('/api/inquiries', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, read: true, password: getAdminPassword() }) })
     fetchInquiries()
   }
   const markAllRead = async () => {
     const unread = inquiries.filter(i => !i.read)
-    await Promise.all(unread.map(i => fetch('/api/inquiries', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: i.id, read: true }) })))
+    await Promise.all(unread.map(i => fetch('/api/inquiries', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: i.id, read: true, password: getAdminPassword() }) })))
     toast.success(`Marked ${unread.length} as read`); fetchInquiries()
   }
   const handleDelete = async (id: string) => {
-    await fetch('/api/inquiries', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }) })
+    await fetch(`/api/inquiries?id=${id}`, { method: 'DELETE' })
     toast.success('Inquiry deleted'); fetchInquiries()
   }
 
@@ -2110,13 +2121,13 @@ function AdminGallery() {
   useEffect(() => { fetchImages() }, [fetchImages])
 
   const handleAdd = async () => {
-    const res = await fetch('/api/gallery', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) })
+    const res = await fetch('/api/gallery', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...form, password: getAdminPassword() }) })
     if (res.ok) { toast.success('Image added!'); setShowForm(false); setForm({ src: '', alt: '', category: 'temples' }); fetchImages() } else { toast.error('Failed to add') }
   }
 
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this image?')) return
-    const res = await fetch('/api/gallery', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }) })
+    const res = await fetch(`/api/gallery?id=${id}`, { method: 'DELETE' })
     if (res.ok) { toast.success('Image deleted'); fetchImages() } else { toast.error('Failed to delete') }
   }
 
@@ -2178,7 +2189,7 @@ function AdminSettingsTab({ currentUser }: { currentUser: AdminUser | null }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'changePassword', currentPassword, newPassword }),
       })
-      if (res.ok) { toast.success('Password changed successfully!'); setCurrentPassword(''); setNewPassword(''); setConfirmPassword('') }
+      if (res.ok) { toast.success('Password changed successfully!'); localStorage.setItem('braj-admin-password', newPassword); setCurrentPassword(''); setNewPassword(''); setConfirmPassword('') }
       else { const data = await res.json(); toast.error(data.error || 'Failed to change password') }
     } catch { toast.error('Network error') } finally { setChanging(false) }
   }

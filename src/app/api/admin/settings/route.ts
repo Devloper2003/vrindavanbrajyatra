@@ -4,7 +4,7 @@ import { db } from '@/lib/db'
 const DEFAULT_PASSWORD_HASH = btoa(process.env.ADMIN_PASSWORD || 'brajyatra2024')
 
 // GET - Get admin settings
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const settings = await db.adminSettings.findMany()
     return NextResponse.json(settings)
@@ -31,11 +31,24 @@ export async function PUT(request: NextRequest) {
       }
 
       const newHash = btoa(newPassword)
+
+      // Update AdminSettings
       await db.adminSettings.upsert({
         where: { key: 'admin_password' },
         update: { value: newHash },
         create: { key: 'admin_password', value: newHash },
       })
+
+      // Also update all admin users' passwords
+      const adminUsers = await db.adminUser.findMany({ where: { role: 'admin' } })
+      for (const user of adminUsers) {
+        if (user.password === currentHash) {
+          await db.adminUser.update({
+            where: { id: user.id },
+            data: { password: newHash },
+          })
+        }
+      }
 
       return NextResponse.json({ success: true, message: 'Password updated successfully' })
     }

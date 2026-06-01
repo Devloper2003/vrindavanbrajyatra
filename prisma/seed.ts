@@ -3,6 +3,39 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
+  const adminPassword = process.env.ADMIN_PASSWORD || 'brajyatra2024'
+  const passwordHash = btoa(adminPassword)
+
+  // Seed Admin User
+  await prisma.adminUser.upsert({
+    where: { username: 'admin' },
+    update: {},
+    create: {
+      username: 'admin',
+      password: passwordHash,
+      role: 'admin',
+      name: 'Admin',
+      canEditHero: true,
+      canEditAbout: true,
+      canEditHighlights: true,
+      canEditPackages: true,
+      canEditTestimonials: true,
+      canEditFAQ: true,
+      canEditContact: true,
+      canEditFooter: true,
+      canManageBlogs: true,
+      canManageGallery: true,
+      canViewInquiries: true,
+    },
+  })
+
+  // Store password hash in AdminSettings for legacy login
+  await prisma.adminSettings.upsert({
+    where: { key: 'admin_password' },
+    update: { value: passwordHash },
+    create: { key: 'admin_password', value: passwordHash },
+  })
+
   // Seed Blogs
   const blog1 = await prisma.blog.upsert({
     where: { slug: 'top-10-must-visit-temples-vrindavan' },
@@ -69,6 +102,7 @@ async function main() {
   }
 
   console.log('✅ Seed data created successfully!')
+  console.log(` - 1 admin user (username: admin, password: ${adminPassword})`)
   console.log(` - ${3} blogs`)
   console.log(` - ${galleryImages.length} gallery images`)
 }
