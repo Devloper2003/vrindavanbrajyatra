@@ -252,7 +252,7 @@ export default function PackagesContent() {
                           </Link>
                         </div>
                         <div className="flex-1">
-                          <a href="https://wa.me/918923944869" target="_blank" rel="noopener noreferrer" className="block">
+                          <a href="https://wa.me/918923944689" target="_blank" rel="noopener noreferrer" className="block">
                             <Button variant="outline" className={`w-full ${colors.text} border-current font-semibold rounded-full py-5`}>
                               WhatsApp
                             </Button>

@@ -99,7 +99,7 @@ export default function CTASection() {
             </Link>
 
             {/* WhatsApp Us */}
-            <a href="https://wa.me/918923944869" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/918923944689" target="_blank" rel="noopener noreferrer">
               <div className="relative group">
                 <div className="absolute -inset-1 bg-green-400/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                 <Button
@@ -116,7 +116,7 @@ export default function CTASection() {
             </a>
 
             {/* Call Now */}
-            <a href="tel:+918923944869">
+            <a href="tel:+918923944689">
               <div className="relative group">
                 <div className="absolute -inset-1 bg-braj-gold/15 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                 <Button

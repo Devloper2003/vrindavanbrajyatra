@@ -145,7 +145,7 @@ export function generateLocalBusinessJsonLd() {
     name: SITE_NAME,
     description: 'Best pilgrimage tour packages for Braj Bhoomi - Vrindavan, Mathura, Govardhan, Barsana, Nandgaon & Gokul',
     url: BASE_URL,
-    telephone: '+918923944869',
+    telephone: '+918923944689',
     email: 'tour@vrindavanbrajyatra.in',
     address: {
       '@type': 'PostalAddress',

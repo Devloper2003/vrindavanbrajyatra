@@ -191,7 +191,7 @@ export default function HeroSection() {
             </motion.div>
 
             <motion.div variants={fadeInUp}>
-              <a href="https://wa.me/918923944869" target="_blank" rel="noopener noreferrer">
+              <a href="https://wa.me/918923944689" target="_blank" rel="noopener noreferrer">
                 <Button
                   size="lg"
                   variant="outline"

@@ -67,7 +67,7 @@ export default function HeroSection() {
               className="bg-[#25D366] text-white hover:bg-[#25D366]/90 font-semibold text-base px-8 py-6 h-auto"
             >
               <a
-                href="https://wa.me/918923944869?text=Hare%20Krishna!%20I%20want%20to%20know%20about%20Braj%20Yatra%20packages"
+                href="https://wa.me/918923944689?text=Hare%20Krishna!%20I%20want%20to%20know%20about%20Braj%20Yatra%20packages"
                 target="_blank"
                 rel="noopener noreferrer"
               >

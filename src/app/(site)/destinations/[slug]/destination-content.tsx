@@ -183,7 +183,7 @@ export default function DestinationContent({ destination }: Props) {
                     </Link>
                   </div>
                   <div className="mt-3">
-                    <a href="https://wa.me/918923944869" target="_blank" rel="noopener noreferrer">
+                    <a href="https://wa.me/918923944689" target="_blank" rel="noopener noreferrer">
                       <Button variant="outline" className="w-full border-braj-teal text-braj-teal hover:bg-braj-teal hover:text-white font-semibold rounded-full gap-2">
                         <MessageCircle className="w-4 h-4" /> WhatsApp Us
                       </Button>
@@ -430,7 +430,7 @@ export default function DestinationContent({ destination }: Props) {
                 View Packages <ArrowRight className="w-5 h-5" />
               </Button>
             </Link>
-            <a href="https://wa.me/918923944869" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/918923944689" target="_blank" rel="noopener noreferrer">
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 font-semibold px-8 gap-2 rounded-full">
                 <MessageCircle className="w-5 h-5" /> Chat on WhatsApp
               </Button>

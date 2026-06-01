@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     default: "Vrindavan Braj Yatra — Best Pilgrimage Tour Packages for Braj Bhoomi",
     template: "%s | Vrindavan Braj Yatra",
   },
-  description: "Book your divine Braj Yatra with Vrindavan Braj Yatra. Affordable pilgrimage packages for Vrindavan, Mathura, Govardhan, Barsana, Nandgaon & Gokul. Trusted local guides, comfortable travel, proper darshan planning. Call +91 89239 44869.",
+  description: "Book your divine Braj Yatra with Vrindavan Braj Yatra. Affordable pilgrimage packages for Vrindavan, Mathura, Govardhan, Barsana, Nandgaon & Gokul. Trusted local guides, comfortable travel, proper darshan planning. Call +91 89239 44689.",
   keywords: ["Braj Yatra", "Vrindavan Darshan", "Mathura Vrindavan Tour", "Braj Bhoomi", "Govardhan Parikrama", "Barsana Yatra", "Pilgrimage Tour Vrindavan", "Vrindavan Temple Tour", "Mathura Tour Package", "Braj Yatra Package"],
   authors: [{ name: "Vrindavan Braj Yatra" }],
   icons: {
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Vrindavan Braj Yatra — Experience the Divine Essence of Braj Bhoomi",
-    description: "Book your divine Braj Yatra with Vrindavan Braj Yatra. Explore Vrindavan, Mathura, Govardhan, Barsana, Nandgaon & Gokul. Comfortable travel, local guides, proper darshan planning. Call +91 89239 44869",
+    description: "Book your divine Braj Yatra with Vrindavan Braj Yatra. Explore Vrindavan, Mathura, Govardhan, Barsana, Nandgaon & Gokul. Comfortable travel, local guides, proper darshan planning. Call +91 89239 44689",
     url: "https://vrindavanbrajyatra.in",
     siteName: "Vrindavan Braj Yatra",
     type: "website",
@@ -59,7 +59,7 @@ export default function RootLayout({
               name: "Vrindavan Braj Yatra",
               description: "Best pilgrimage tour packages for Braj Bhoomi - Vrindavan, Mathura, Govardhan, Barsana, Nandgaon & Gokul",
               url: "https://vrindavanbrajyatra.in",
-              telephone: "+918923944869",
+              telephone: "+918923944689",
               email: "tour@vrindavanbrajyatra.in",
               address: {
                 "@type": "PostalAddress",

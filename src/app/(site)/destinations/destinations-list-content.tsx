@@ -151,7 +151,7 @@ export default function DestinationsListContent() {
                 View Packages <ArrowRight className="w-5 h-5" />
               </Button>
             </Link>
-            <a href="https://wa.me/918923944869" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/918923944689" target="_blank" rel="noopener noreferrer">
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 font-semibold px-8 gap-2 rounded-full">
                 Chat on WhatsApp
               </Button>

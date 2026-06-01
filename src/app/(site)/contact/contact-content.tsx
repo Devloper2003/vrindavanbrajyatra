@@ -170,8 +170,8 @@ export default function ContactContent() {
   }
 
   const contactCards = [
-    { icon: Phone, title: 'Call Us', content: '+91 89239 44869', href: 'tel:+918923944869', color: 'bg-braj-dark-green/10', iconColor: 'text-braj-dark-green' },
-    { icon: MessageCircle, title: 'WhatsApp', content: 'Chat on WhatsApp', href: 'https://wa.me/918923944869', color: 'bg-green-500/10', iconColor: 'text-green-600', linkProps: { target: '_blank', rel: 'noopener noreferrer' } },
+    { icon: Phone, title: 'Call Us', content: '+91 89239 44689', href: 'tel:+918923944689', color: 'bg-braj-dark-green/10', iconColor: 'text-braj-dark-green' },
+    { icon: MessageCircle, title: 'WhatsApp', content: 'Chat on WhatsApp', href: 'https://wa.me/918923944689', color: 'bg-green-500/10', iconColor: 'text-green-600', linkProps: { target: '_blank', rel: 'noopener noreferrer' } },
     { icon: Mail, title: 'Email', content: 'tour@vrindavanbrajyatra.in', href: 'mailto:tour@vrindavanbrajyatra.in', color: 'bg-braj-gold/10', iconColor: 'text-braj-gold' },
     { icon: MapPin, title: 'Our Location', content: 'Infront of Kailash Nagar, Near Shani Dev Mandir, Mathura Vrindavan Road, Vrindavan - 281121', color: 'bg-braj-saffron/10', iconColor: 'text-braj-saffron', noLink: true },
     { icon: Clock, title: 'Business Hours', content: 'Monday - Saturday: 6:00 AM - 9:00 PM\nSunday: 7:00 AM - 6:00 PM', color: 'bg-braj-teal/10', iconColor: 'text-braj-teal', noLink: true },
@@ -238,7 +238,7 @@ export default function ContactContent() {
             variants={staggerContainer}
           >
             <motion.a
-              href="https://wa.me/918923944869"
+              href="https://wa.me/918923944689"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-full shadow-lg shadow-green-600/30 transition-colors"
@@ -253,7 +253,7 @@ export default function ContactContent() {
             </motion.a>
 
             <motion.a
-              href="tel:+918923944869"
+              href="tel:+918923944689"
               className="inline-flex items-center gap-3 px-8 py-4 bg-braj-dark-green hover:bg-braj-teal text-white font-semibold rounded-full shadow-lg shadow-braj-dark-green/30 transition-colors"
               variants={scaleIn}
               transition={springTransition}

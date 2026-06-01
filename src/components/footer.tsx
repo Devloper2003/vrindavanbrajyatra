@@ -131,9 +131,9 @@ export default function Footer() {
             <h4 className="font-bold text-braj-saffron mb-4 text-sm uppercase tracking-wider">Contact Us</h4>
             <ul className="space-y-3">
               <li>
-                <a href="tel:+918923944869" className="flex items-start gap-2 text-white/70 hover:text-braj-saffron transition-colors duration-300 text-sm group">
+                <a href="tel:+918923944689" className="flex items-start gap-2 text-white/70 hover:text-braj-saffron transition-colors duration-300 text-sm group">
                   <Phone className="w-4 h-4 mt-0.5 shrink-0 group-hover:scale-110 transition-transform duration-300" />
-                  <span>+91 89239 44869</span>
+                  <span>+91 89239 44689</span>
                 </a>
               </li>
               <li>

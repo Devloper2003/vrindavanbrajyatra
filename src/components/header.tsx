@@ -193,7 +193,7 @@ export default function Header() {
           {/* CTA + Mobile Toggle */}
           <div className="flex items-center gap-2 sm:gap-3">
             <motion.a
-              href="tel:+918923944869"
+              href="tel:+918923944689"
               className="hidden sm:flex"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -204,7 +204,7 @@ export default function Header() {
                 Call Now
               </Button>
             </motion.a>
-            <a href="tel:+918923944869" className="sm:hidden">
+            <a href="tel:+918923944689" className="sm:hidden">
               <Button size="sm" className="bg-braj-saffron text-braj-dark-green hover:bg-braj-gold p-2 rounded-full">
                 <Phone className="w-4 h-4" />
               </Button>
