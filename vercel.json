@@ -1,9 +1,6 @@
 {
-  "buildCommand": "prisma generate && next build",
+  "buildCommand": "prisma generate && DATABASE_URL=$DATABASE_URL_UNPOOLED prisma migrate deploy && next build",
   "installCommand": "npm install",
   "framework": "nextjs",
-  "regions": ["bom1"],
-  "env": {
-    "ADMIN_PASSWORD": "brajyatra2024"
-  }
+  "regions": ["bom1"]
 }
