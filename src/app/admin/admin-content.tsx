@@ -528,6 +528,43 @@ function AdminLogin({ onLogin }: { onLogin: (user: AdminUser, password?: string)
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [initializing, setInitializing] = useState(false)
+  const [dbStatus, setDbStatus] = useState<'unknown' | 'initializing' | 'ready' | 'error'>('unknown')
+
+  // Auto-initialize database on mount
+  useEffect(() => {
+    const initDb = async () => {
+      try {
+        const res = await fetch('/api/init-db')
+        if (res.ok) {
+          setDbStatus('ready')
+        } else {
+          setDbStatus('error')
+        }
+      } catch {
+        setDbStatus('error')
+      }
+    }
+    initDb()
+  }, [])
+
+  const handleInitializeDb = async () => {
+    setInitializing(true)
+    try {
+      const res = await fetch('/api/init-db', { method: 'POST' })
+      if (res.ok) {
+        setDbStatus('ready')
+        setError('')
+      } else {
+        const data = await res.json()
+        setError(data.message || 'Database initialization failed')
+      }
+    } catch {
+      setError('Failed to connect to database. Check your DATABASE_URL.')
+    } finally {
+      setInitializing(false)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -544,7 +581,13 @@ function AdminLogin({ onLogin }: { onLogin: (user: AdminUser, password?: string)
         const user: AdminUser = data.user || DEFAULT_USER
         onLogin(user, password)
       } else {
-        setError('Invalid credentials. Please try again.')
+        const data = await res.json().catch(() => ({}))
+        if (data.error?.includes('Database')) {
+          setError('Database not ready. Click "Initialize Database" below first.')
+          setDbStatus('error')
+        } else {
+          setError('Invalid credentials. Please try again.')
+        }
       }
     } catch {
       setError('Network error. Please try again.')
@@ -572,6 +615,28 @@ function AdminLogin({ onLogin }: { onLogin: (user: AdminUser, password?: string)
           <h1 className="text-2xl font-bold text-braj-dark-green">Admin Login</h1>
           <p className="text-muted-foreground text-sm mt-1">Vrindavan Braj Yatra Management</p>
         </div>
+
+        {/* Database Status Indicator */}
+        {dbStatus === 'error' && (
+          <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+            <p className="text-amber-700 text-sm font-medium mb-2">Database needs initialization</p>
+            <Button
+              type="button"
+              onClick={handleInitializeDb}
+              disabled={initializing}
+              className="w-full bg-amber-600 hover:bg-amber-700 text-white text-sm py-2"
+            >
+              {initializing ? (
+                <span className="flex items-center gap-2">
+                  <RefreshCw className="w-3 h-3 animate-spin" /> Initializing...
+                </span>
+              ) : (
+                'Initialize Database'
+              )}
+            </Button>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <Label htmlFor="username">Username</Label>
