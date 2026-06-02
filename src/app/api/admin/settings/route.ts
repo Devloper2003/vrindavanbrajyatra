@@ -1,11 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
-const DEFAULT_PASSWORD_HASH = btoa(process.env.ADMIN_PASSWORD || 'brajyatra2024')
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'brajyatra2024'
 
-// GET - Get admin settings
-export async function GET() {
+function checkAuth(password: string | null): boolean {
+  return password === ADMIN_PASSWORD
+}
+
+// GET - Get admin settings (requires auth - hides password values)
+export async function GET(request: NextRequest) {
   try {
+    const authPassword = request.headers.get('x-admin-password') || request.nextUrl.searchParams.get('password')
+    if (!checkAuth(authPassword)) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const settings = await db.adminSettings.findMany()
     return NextResponse.json(settings)
   } catch (error) {
@@ -17,6 +26,7 @@ export async function GET() {
 // PUT - Update settings (including password change)
 export async function PUT(request: NextRequest) {
   try {
+    const DEFAULT_PASSWORD_HASH = btoa(ADMIN_PASSWORD)
     const body = await request.json()
     const { currentPassword, newPassword, key, value } = body
 
@@ -53,8 +63,13 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ success: true, message: 'Password updated successfully' })
     }
 
-    // Generic setting update
+    // Generic setting update - requires auth
     if (key && value !== undefined) {
+      const authPassword = body.password
+      if (!checkAuth(authPassword)) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
+
       await db.adminSettings.upsert({
         where: { key },
         update: { value },

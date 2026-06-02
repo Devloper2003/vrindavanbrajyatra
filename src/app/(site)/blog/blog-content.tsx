@@ -41,7 +41,7 @@ export default function BlogContent() {
     fetch('/api/blogs')
       .then(res => res.json())
       .then(data => {
-        setBlogs(Array.isArray(data) ? data.filter((b: Blog) => b.published) : [])
+        setBlogs(Array.isArray(data) ? data : [])
       })
       .catch(() => {})
       .finally(() => setLoading(false))

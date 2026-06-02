@@ -717,7 +717,7 @@ function AdminDashboard({ onNavigate, userName }: { onNavigate: (tab: Tab) => vo
 
   useEffect(() => {
     Promise.all([
-      fetch('/api/blogs').then(r => r.json()),
+      fetch(`/api/blogs?password=${encodeURIComponent(getAdminPassword())}`).then(r => r.json()),
       fetch('/api/inquiries').then(r => r.json()),
       fetch('/api/gallery').then(r => r.json()),
       fetch('/api/section-content').then(r => r.json()),
@@ -2021,7 +2021,7 @@ function AdminBlogs() {
   const [form, setForm] = useState({ title: '', slug: '', excerpt: '', content: '', category: 'yatra', featuredImage: '', published: false })
 
   const fetchBlogs = useCallback(() => {
-    fetch('/api/blogs').then(r => r.json()).then(data => { if (Array.isArray(data)) setBlogs(data) }).catch(() => {}).finally(() => setLoading(false))
+    fetch(`/api/blogs?password=${encodeURIComponent(getAdminPassword())}`).then(r => r.json()).then(data => { if (Array.isArray(data)) setBlogs(data) }).catch(() => {}).finally(() => setLoading(false))
   }, [])
   useEffect(() => { fetchBlogs() }, [fetchBlogs])
 
@@ -2118,8 +2118,9 @@ function AdminInquiries() {
     toast.success(`Marked ${unread.length} as read`); fetchInquiries()
   }
   const handleDelete = async (id: string) => {
-    await fetch(`/api/inquiries?id=${id}`, { method: 'DELETE' })
-    toast.success('Inquiry deleted'); fetchInquiries()
+    if (!confirm('Delete this inquiry?')) return
+    const res = await fetch(`/api/inquiries?id=${id}&password=${encodeURIComponent(getAdminPassword())}`, { method: 'DELETE' })
+    if (res.ok) { toast.success('Inquiry deleted'); fetchInquiries() } else { toast.error('Failed to delete') }
   }
 
   const filtered = inquiries.filter(i => {
@@ -2192,7 +2193,7 @@ function AdminGallery() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this image?')) return
-    const res = await fetch(`/api/gallery?id=${id}`, { method: 'DELETE' })
+    const res = await fetch(`/api/gallery?id=${id}&password=${encodeURIComponent(getAdminPassword())}`, { method: 'DELETE' })
     if (res.ok) { toast.success('Image deleted'); fetchImages() } else { toast.error('Failed to delete') }
   }
 
@@ -2367,7 +2368,7 @@ function AdminUsers() {
   })
 
   const fetchUsers = useCallback(() => {
-    fetch('/api/admin/users').then(r => r.json()).then(data => { if (Array.isArray(data)) setUsers(data) }).catch(() => {}).finally(() => setLoading(false))
+    fetch('/api/admin/users', { headers: { 'x-admin-password': getAdminPassword() } }).then(r => r.json()).then(data => { if (Array.isArray(data)) setUsers(data) }).catch(() => {}).finally(() => setLoading(false))
   }, [])
   useEffect(() => { fetchUsers() }, [fetchUsers])
 
@@ -2375,7 +2376,7 @@ function AdminUsers() {
     if (!form.username.trim() || (!editUser && !form.password.trim())) { toast.error('Username and password are required'); return }
     const isEdit = !!editUser
     const body = isEdit ? { id: editUser.id, ...form, ...(form.role === 'staff' ? perms : {}), ...(form.password ? {} : { password: undefined }) } : { ...form, ...perms }
-    const res = await fetch('/api/admin/users', { method: isEdit ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+    const res = await fetch('/api/admin/users', { method: isEdit ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...body, password: getAdminPassword() }) })
     if (res.ok) { toast.success(isEdit ? 'User updated!' : 'User created!'); setShowForm(false); setEditUser(null); fetchUsers() } else { toast.error('Failed to save user') }
   }
 
@@ -2384,7 +2385,7 @@ function AdminUsers() {
     const user = users.find(u => u.id === id)
     if (user?.role === 'admin' && adminCount <= 1) { toast.error('Cannot delete the last admin user'); return }
     if (!confirm('Delete this user?')) return
-    const res = await fetch('/api/admin/users', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }) })
+    const res = await fetch(`/api/admin/users?id=${id}&password=${encodeURIComponent(getAdminPassword())}`, { method: 'DELETE' })
     if (res.ok) { toast.success('User deleted'); fetchUsers() } else { toast.error('Failed to delete') }
   }
 

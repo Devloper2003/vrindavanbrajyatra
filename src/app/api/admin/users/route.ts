@@ -1,9 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
-// GET - List all admin users
-export async function GET() {
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'brajyatra2024'
+
+// Simple auth check helper
+function checkAuth(password: string | null): boolean {
+  return password === ADMIN_PASSWORD
+}
+
+// GET - List all admin users (requires auth via header)
+export async function GET(request: NextRequest) {
   try {
+    const authPassword = request.headers.get('x-admin-password') || request.nextUrl.searchParams.get('password')
+    if (!checkAuth(authPassword)) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const users = await db.adminUser.findMany({
       orderBy: { createdAt: 'desc' },
     })
@@ -20,12 +32,15 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const {
-      username, password, name, role,
+    const { password: authPassword, username, password, name, role,
       canEditHero, canEditAbout, canEditHighlights, canEditPackages,
       canEditTestimonials, canEditFAQ, canEditContact, canEditFooter,
       canManageBlogs, canManageGallery, canViewInquiries,
     } = body
+
+    if (!checkAuth(authPassword)) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
 
     if (!username || !password || !name) {
       return NextResponse.json({ error: 'Username, password, and name are required' }, { status: 400 })
@@ -41,25 +56,16 @@ export async function POST(request: NextRequest) {
 
     const user = await db.adminUser.create({
       data: {
-        username,
-        password: passwordHash,
-        name,
-        role: role || 'staff',
-        canEditHero: canEditHero ?? false,
-        canEditAbout: canEditAbout ?? false,
-        canEditHighlights: canEditHighlights ?? false,
-        canEditPackages: canEditPackages ?? false,
-        canEditTestimonials: canEditTestimonials ?? false,
-        canEditFAQ: canEditFAQ ?? false,
-        canEditContact: canEditContact ?? false,
-        canEditFooter: canEditFooter ?? false,
-        canManageBlogs: canManageBlogs ?? false,
-        canManageGallery: canManageGallery ?? false,
+        username, password: passwordHash, name, role: role || 'staff',
+        canEditHero: canEditHero ?? false, canEditAbout: canEditAbout ?? false,
+        canEditHighlights: canEditHighlights ?? false, canEditPackages: canEditPackages ?? false,
+        canEditTestimonials: canEditTestimonials ?? false, canEditFAQ: canEditFAQ ?? false,
+        canEditContact: canEditContact ?? false, canEditFooter: canEditFooter ?? false,
+        canManageBlogs: canManageBlogs ?? false, canManageGallery: canManageGallery ?? false,
         canViewInquiries: canViewInquiries ?? true,
       },
     })
 
-    // Don't return password hash
     const { password: _password, ...safeUser } = user
     return NextResponse.json(safeUser, { status: 201 })
   } catch (error) {
@@ -72,7 +78,11 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json()
-    const { id, name, role, password, ...permissions } = body
+    const { password: authPassword, id, name, role, password, ...permissions } = body
+
+    if (!checkAuth(authPassword)) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
 
     if (!id) {
       return NextResponse.json({ error: 'User ID is required' }, { status: 400 })
@@ -88,23 +98,16 @@ export async function PUT(request: NextRequest) {
     if (role !== undefined) updateData.role = role
     if (password) updateData.password = btoa(password)
 
-    // Add permission fields if provided
     const permFields = [
       'canEditHero', 'canEditAbout', 'canEditHighlights', 'canEditPackages',
       'canEditTestimonials', 'canEditFAQ', 'canEditContact', 'canEditFooter',
       'canManageBlogs', 'canManageGallery', 'canViewInquiries',
     ]
     for (const field of permFields) {
-      if (permissions[field] !== undefined) {
-        updateData[field] = permissions[field]
-      }
+      if (permissions[field] !== undefined) updateData[field] = permissions[field]
     }
 
-    const user = await db.adminUser.update({
-      where: { id },
-      data: updateData,
-    })
-
+    const user = await db.adminUser.update({ where: { id }, data: updateData })
     const { password: _password, ...safeUser } = user
     return NextResponse.json(safeUser)
   } catch (error) {
@@ -118,6 +121,11 @@ export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const id = searchParams.get('id')
+    const authPassword = searchParams.get('password') || request.headers.get('x-admin-password')
+
+    if (!checkAuth(authPassword)) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
 
     if (!id) {
       return NextResponse.json({ error: 'User ID is required' }, { status: 400 })
